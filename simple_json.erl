@@ -23,7 +23,8 @@ list_of_fields_to_dict(D, []) ->
     D;
 
 list_of_fields_to_dict(D, [Field]) ->
-    {Key, Value} = split_field(Field),
+    StrippedField = string:strip(Field, both, $ ),
+    {Key, Value} = split_field(StrippedField),
     dict:store(Key, Value, D);
 
 list_of_fields_to_dict(D, [Field|Tail]) ->
@@ -83,6 +84,11 @@ number_field_test() ->
 
 multiple_fields_test() ->
     Result = parse_simple_json("{\"ExpiresOn\":\"2017-09-28T15:19:13\",\"Scopes\":\"myScope\",\"TokenType\":\"Service\",\"ApplicationID\":42,\"ClientIdentifier\":\"myApp\",\"IntellectualProperty\":\"myIP\"}"),
+    6 = dict:size(Result),
+    "Service" = dict:fetch("TokenType", Result).
+
+multiple_fields_with_spaces_test() ->
+    Result = parse_simple_json("{\"ExpiresOn\":\"2017-09-28T15:19:13\",     \"Scopes\":\"myScope\", \"TokenType\":\"Service\", \"ApplicationID\":42, \"ClientIdentifier\":\"myApp\", \"IntellectualProperty\":\"myIP\"}"),
     6 = dict:size(Result),
     "Service" = dict:fetch("TokenType", Result).
 
