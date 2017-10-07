@@ -55,18 +55,18 @@ tokenize(<<First, Rest/binary>>) ->
 
 consume(number, [First], Rest) ->
     Input = <<First, Rest/binary>>,
-    {FloatValue, FloatRemainder} = string:to_float(Input),
+    {FloatValue, FloatRemainder} = string:to_float(binary_to_list(Input)),
     case FloatValue of
         error ->
-            {IntValue, IntRemainder} = string:to_integer(Input),
+            {IntValue, IntRemainder} = string:to_integer(binary_to_list(Input)),
             case IntValue of
                 error ->
                     {{error, none}, Input};
                 _ ->
-                    {{number, IntValue}, IntRemainder}
+                    {{number, IntValue}, list_to_binary(IntRemainder)}
             end;
         _ ->
-            {{number, FloatValue}, FloatRemainder}
+            {{number, FloatValue}, list_to_binary(FloatRemainder)}
     end;
 
 consume(whitespace, [First], Rest) ->
