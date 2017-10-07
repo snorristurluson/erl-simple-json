@@ -1,5 +1,4 @@
 -module(simple_json_test).
--compile(export_all).
 
 -include_lib("eunit/include/eunit.hrl").
 

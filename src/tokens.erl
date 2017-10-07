@@ -77,6 +77,9 @@ consume(qoute, [_Qoute], <<First, Rest/binary>>) ->
     T = token_type(First),
     consume_until_qoute(T, <<>>, First, Rest);
 
+consume(other, [First], Rest) ->
+    consume_other(<<First>>, Rest);
+
 consume(TokenType, [_First], Rest) ->
     {TokenType, Rest}.
 
@@ -107,6 +110,30 @@ consume_until_qoute(_TokenType, Acc, Prev, <<Last>>) ->
 consume_until_qoute(_TokenType, Acc, Prev, <<First, Rest/binary>>) ->
     T = token_type(First),
     consume_until_qoute(T, <<Acc/binary, Prev>>, First, Rest).
+
+consume_other(Acc, <<>>) ->
+    other_to_token(Acc, <<>>);
+
+consume_other(Acc, <<First, Rest/binary>>) ->
+    T = token_type(First),
+    case T of
+        other -> consume_other(<<Acc/binary, First>>, Rest);
+        _ ->
+            other_to_token(Acc, <<First, Rest/binary>>)
+    end.
+
+%% other_to_token looks for true, false and null
+other_to_token(<<"true">>, Rest) ->
+    {true, Rest};
+
+other_to_token(<<"false">>, Rest) ->
+    {false, Rest};
+
+other_to_token(<<"null">>, Rest) ->
+    {null, Rest};
+
+other_to_token(_, Rest) ->
+    {error, Rest}.
 
 tokenize(First, Rest) ->
     T = token_type(First),

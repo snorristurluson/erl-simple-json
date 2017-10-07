@@ -17,10 +17,10 @@ parse_json_value(Input) ->
             populate_object(dict:new(), Rest);
         open_square_bracket ->
             populate_list([], Rest);
-        {qouted_string, StringValue} ->
-            {StringValue, Rest};
-        {number, NumericValue} ->
-            {NumericValue, Rest}
+        {_, Value} ->
+            {Value, Rest};
+        Other ->
+            {Other, Rest}
     end.
 
 populate_object(Obj, Input) ->
@@ -45,5 +45,8 @@ populate_list(List, Input) ->
         comma ->
             populate_list(List, Rest);
         {_, Value} ->
-            populate_list(lists:append(List, [Value]), Rest)
+            populate_list(lists:append(List, [Value]), Rest);
+        Other ->
+            populate_list(lists:append(List, [Other]), Rest)
+
     end.

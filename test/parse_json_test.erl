@@ -30,3 +30,20 @@ list_field_test() ->
     D = parse_json:parse_json(<<"{\"bingo\": [42, 3.14, 123]}">>),
     [42, 3.14, 123] = dict:fetch(<<"bingo">>, D).
 
+true_test() ->
+    true = parse_json:parse_json(<<"true">>).
+
+true_field_test() ->
+    D = parse_json:parse_json(<<"{\"bingo\": true}">>),
+    true = dict:fetch(<<"bingo">>, D).
+
+false_field_test() ->
+    D = parse_json:parse_json(<<"{\"bingo\": false}">>),
+    false = dict:fetch(<<"bingo">>, D).
+
+null_field_test() ->
+    D = parse_json:parse_json(<<"{\"bingo\": null}">>),
+    null = dict:fetch(<<"bingo">>, D).
+
+list_of_bool_and_null_test() ->
+    [true, false, null] = parse_json:parse_json(<<"[true, false, null]">>).
