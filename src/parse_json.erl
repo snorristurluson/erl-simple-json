@@ -44,6 +44,9 @@ populate_list(List, Input) ->
             {List, Rest};
         comma ->
             populate_list(List, Rest);
+        open_brace ->
+            {Obj, Rest2} = populate_object(dict:new(), Rest),
+            populate_list(lists:append(List, [Obj]), Rest2);
         {_, Value} ->
             populate_list(lists:append(List, [Value]), Rest);
         Other ->
