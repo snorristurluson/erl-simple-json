@@ -22,3 +22,11 @@ numeric_field_test() ->
     42 = dict:fetch(<<"bingo">>, D),
     3.14 = dict:fetch(<<"foo">>, D).
 
+empty_list_field_test() ->
+    D = parse_json:parse_json(<<"{\"bingo\": []}">>),
+    [] = dict:fetch(<<"bingo">>, D).
+
+list_field_test() ->
+    D = parse_json:parse_json(<<"{\"bingo\": [42, 3.14, 123]}">>),
+    [42, 3.14, 123] = dict:fetch(<<"bingo">>, D).
+
