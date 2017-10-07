@@ -1,4 +1,6 @@
 # erl-simple-json
+[![Build status](https://travis-ci.org/snorristurluson/erl-simple-json.svg?branch=master)](https://travis-ci.org/snorristurluson/erl-simple-json#)
+
 A simple JSON parser in Erlang.
 
 ## parse_json
